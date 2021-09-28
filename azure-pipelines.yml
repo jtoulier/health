@@ -20,6 +20,18 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean package'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+        tags: |
+          $(tag)
 - stage: Build
   displayName: Build and push stage
   jobs:
@@ -35,5 +47,4 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+
